@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Basics &#8212; Migrations with Transmogrifier - Last updated: November 25, 2016</title>
+    
+    <link rel="stylesheet" href="static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'November 25, 2016',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="shortcut icon" href="static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Migrations with Transmogrifier - Last updated: November 25, 2016" href="index.html" />
+    <link rel="next" title="Default blueprints" href="default_blueprints.html" />
+    <link rel="prev" title="What is Transmogrifier?" href="what_is_tm.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="default_blueprints.html" title="Default blueprints"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="what_is_tm.html" title="What is Transmogrifier?"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Migrations with Transmogrifier - Last updated: November 25, 2016</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="basics">
+<h1>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h1>
+<p>buildout configuration file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">transmogrifier</span><span class="p">]</span>
+<span class="n">pipeline</span> <span class="o">=</span>
+   <span class="n">source</span>
+   <span class="n">transform</span> <span class="mi">1</span>
+   <span class="n">transform</span> <span class="mi">2</span>
+   <span class="n">create</span>
+
+<span class="p">[</span><span class="n">source</span><span class="p">]</span>
+<span class="n">blueprint</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">transmogrifier</span><span class="o">.</span><span class="n">source</span>
+
+<span class="p">[</span><span class="n">transform</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">blueprint</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">transmogrifier</span><span class="o">.</span><span class="n">transform</span>
+<span class="n">from_field</span> <span class="o">=</span> <span class="n">text</span>
+<span class="n">to_field</span> <span class="o">=</span> <span class="n">text</span>
+<span class="n">transform</span> <span class="o">=</span> <span class="n">rst</span>
+<span class="n">condition</span> <span class="o">=</span> <span class="n">python</span><span class="p">:</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.rst&#39;</span><span class="p">)</span>
+
+<span class="p">[</span><span class="n">transform</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">blueprint</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">transmogrifier</span><span class="o">.</span><span class="n">transform</span>
+<span class="n">from_field</span> <span class="o">=</span> <span class="n">text</span>
+<span class="n">to_field</span> <span class="o">=</span> <span class="n">description</span>
+<span class="n">transform</span> <span class="o">=</span> <span class="n">get_first_paragraph</span>
+
+<span class="p">[</span><span class="n">create</span><span class="p">]</span>
+<span class="n">blueprint</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">transmogrifier</span><span class="o">.</span><span class="n">constructor</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">configure</span>
+    <span class="n">xmlns</span><span class="o">=</span><span class="s2">&quot;http://namespaces.zope.org/zope&quot;</span>
+    <span class="n">xmlns</span><span class="p">:</span><span class="n">tg</span><span class="o">=</span><span class="s2">&quot;http://namespaces.plone.org/transmogrifier&quot;</span>
+    <span class="n">i18n_domain</span><span class="o">=</span><span class="s2">&quot;example.transmogrifier&quot;</span><span class="o">&gt;</span>
+
+  <span class="o">&lt;</span><span class="n">tg</span><span class="p">:</span><span class="n">registerConfig</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;exampleconfig&quot;</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Example&quot;</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Example pipeline config&quot;</span>
+    <span class="n">configuration</span><span class="o">=</span><span class="s2">&quot;example.cfg&quot;</span>
+    <span class="o">/&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="pipeline">
+<h2>Pipeline<a class="headerlink" href="#pipeline" title="Permalink to this headline">¶</a></h2>
+<p><strong>ordered list of blueprints</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">transmogrifier</span><span class="p">]</span>
+<span class="n">pipeline</span> <span class="o">=</span>
+   <span class="n">source</span>
+   <span class="n">transform</span> <span class="mi">1</span>
+   <span class="n">transform</span> <span class="mi">2</span>
+   <span class="n">create</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="blueprints">
+<h2>Blueprints<a class="headerlink" href="#blueprints" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="source-blueprints">
+<h3>source blueprints<a class="headerlink" href="#source-blueprints" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">source</span><span class="p">]</span>
+<span class="n">blueprint</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">transmogrifier</span><span class="o">.</span><span class="n">source</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">utility</span>
+    <span class="n">component</span><span class="o">=</span><span class="s2">&quot;.source.ExampleSource&quot;</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example.transmogrifier.source&quot;</span>
+    <span class="o">/&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span>class ExampleSource(object):
+    classProvides(ISectionBlueprint)
+    implements(ISection)
+
+    def __init__(self, transmogrifier, name, options, previous):
+        self.previous = previous
+        self.name = name
+
+    def __iter__(self):
+        for item in self.previous:
+            yield item
+
+        for record in ReadJSONFile():
+            yield dict(_path=normalize(record[&#39;title&#39;]),
+                       _type=”Document”,
+                       title=record[&#39;title&#39;],
+                       text=record[&#39;text&#39;])
+</pre></div>
+</div>
+</div>
+<div class="section" id="tranform-blueprints">
+<h3>tranform blueprints<a class="headerlink" href="#tranform-blueprints" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">transform</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">blueprint</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">transmogrifier</span><span class="o">.</span><span class="n">transform</span>
+<span class="n">from_field</span> <span class="o">=</span> <span class="n">text</span>
+<span class="n">to_field</span> <span class="o">=</span> <span class="n">text</span>
+<span class="n">transform</span> <span class="o">=</span> <span class="n">rst</span>
+<span class="n">condition</span> <span class="o">=</span> <span class="n">python</span><span class="p">:</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.rst&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">utility</span>
+    <span class="n">component</span><span class="o">=</span><span class="s2">&quot;.transform.ExampleTransform&quot;</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example.transmogrifier.transform&quot;</span>
+    <span class="o">/&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExampleTranform</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">classProvides</span><span class="p">(</span><span class="n">ISectionBlueprint</span><span class="p">)</span>
+    <span class="n">implements</span><span class="p">(</span><span class="n">ISection</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transmogrifier</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">previous</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">previous</span> <span class="o">=</span> <span class="n">previous</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">from_field</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;from_field&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_field</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;to_field&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tranform</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;tranform&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">condition</span> <span class="o">=</span> <span class="n">Condition</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">transmogrifier</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">condition</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="k">if</span> <span class="s1">&#39;rst&#39;</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">:</span>
+                    <span class="n">item</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_field</span><span class="p">]</span> <span class="o">=</span> <span class="n">TransformFromRSTToHTML</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">from_field</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="s1">&#39;get_first_paragraph&#39;</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">:</span>
+                    <span class="n">item</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_field</span><span class="p">]</span> <span class="o">=</span> <span class="n">GetFirstParagraph</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_field</span><span class="p">])</span>
+            <span class="k">yield</span> <span class="n">item</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="what_is_tm.html">What is Transmogrifier?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="default_blueprints.html">Default blueprints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other_useful_blueprints.html">Other usefull blueprints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lessons_learned.html">Lessons learned</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_migration.html">Example migration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Thank you</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="default_blueprints.html" title="Default blueprints"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="what_is_tm.html" title="What is Transmogrifier?"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Migrations with Transmogrifier - Last updated: November 25, 2016</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2010, Rok Garbas &lt;rok@garbas.si&gt;.
+      Last updated on Nov 25, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>
